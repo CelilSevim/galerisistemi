@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* TÜM GİRİŞ KUTULARI İÇİN YAZI RENGİNİ SİYAH YAP */
+input, textarea, select {
+  color: #000000 !important; /* Yazı rengi siyah */
+  background-color: #ffffff; /* Arkaplan beyaz */
+}
+
+/* Placeholder (İpucu yazısı) rengini gri yap */
+input::placeholder, textarea::placeholder {
+  color: #9ca3af !important;
+}

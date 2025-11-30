@@ -108,7 +108,7 @@ export default function Home() {
     }
   }
 
-  // --- WHATSAPP PAYLAŞIM FONKSİYONU (GÜNCELLENDİ) ---
+  // --- WHATSAPP PAYLAŞIM FONKSİYONU ---
   const whatsappPaylas = (arac: any) => {
     const bosluk = '%0A' // Satır atlama kodu
     
@@ -177,7 +177,7 @@ export default function Home() {
   if (!oturumVarMi && yukleniyor) return <div className="min-h-screen flex items-center justify-center bg-gray-50">Yükleniyor...</div>
 
   return (
-    <main className="min-h-screen bg-gray-50 pb-28"> 
+    <main className="min-h-screen bg-gray-50 pb-32"> 
       
       {/* ÜST MENÜ: SİYAH VE GOLD TEMA */}
       <header className="bg-black text-white shadow-lg sticky top-0 z-10 border-b-4 border-[#FFB700]">
@@ -285,7 +285,7 @@ export default function Home() {
                           )}
                           <button onClick={() => { setSozlesmeArac(arac); setAktifSekme('alis') }} className="bg-orange-100 hover:bg-orange-500 hover:text-white text-orange-700 p-2 rounded-lg transition" title="Sözleşmeler">📂</button>
                           
-                          {/* --- WHATSAPP BUTONU (Ekspertizli) --- */}
+                          {/* --- WHATSAPP BUTONU --- */}
                           <button onClick={() => whatsappPaylas(arac)} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg transition" title="WhatsApp ile Paylaş">📲</button>
                           
                           <button onClick={() => window.open(`/arac-vitrin/${arac.id}`, '_blank')} className="bg-gray-100 hover:bg-black hover:text-[#FFB700] text-gray-600 p-2 rounded-lg transition" title="Yazdır">🖨️</button>
@@ -322,19 +322,24 @@ export default function Home() {
         )}
       </div>
 
-      {/* MOBİL ALT MENÜ */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-black border-t border-gray-800 flex justify-between items-end px-6 py-3 z-50 shadow-2xl pb-safe">
-        <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="flex flex-col items-center gap-1 text-gray-400 hover:text-[#FFB700] p-2 w-16">
-          <span className="text-2xl">🏠</span><span className="text-[9px] font-bold">Garaj</span>
+      {/* MOBİL ALT MENÜ (YENİLENMİŞ TASARIM) */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full h-20 bg-black/90 backdrop-blur-md border-t border-white/10 flex justify-around items-center z-50 shadow-2xl pb-safe-area-inset-bottom transition-all">
+        <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-[#FFB700] active:text-[#FFB700] active:scale-110 transition-all p-2">
+          <span className="text-2xl">🏠</span><span className="text-[10px] font-bold">Garaj</span>
         </button>
-        <button onClick={() => router.push('/musteriler')} className="flex flex-col items-center gap-1 text-gray-400 hover:text-[#FFB700] p-2 w-16">
-          <span className="text-2xl">📒</span><span className="text-[9px] font-bold">Müşteri</span>
+        <button onClick={() => router.push('/musteriler')} className="flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-[#FFB700] active:text-[#FFB700] active:scale-110 transition-all p-2">
+          <span className="text-2xl">📒</span><span className="text-[10px] font-bold">Müşteri</span>
         </button>
-        <button onClick={() => router.push('/arac-ekle')} className="bg-[#FFB700] text-black p-4 rounded-xl shadow-lg border-4 border-gray-900 -mb-8 active:scale-95 transition transform hover:bg-yellow-400">
-           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-        </button>
-        <button onClick={() => router.push('/kasa')} className="flex flex-col items-center gap-1 text-gray-400 hover:text-[#FFB700] p-2 w-16">
-          <span className="text-2xl">💰</span><span className="text-[9px] font-bold">Kasa</span>
+        
+        {/* ORTA EKLE BUTONU (VURGULU) */}
+        <div className="relative">
+           <button onClick={() => router.push('/arac-ekle')} className="absolute left-1/2 -translate-x-1/2 -top-10 bg-[#FFB700] text-black p-4 rounded-full shadow-[0_0_25px_rgba(255,183,0,0.6)] border-[3px] border-black active:scale-95 active:shadow-[0_0_10px_rgba(255,183,0,0.4)] transition-all transform hover:bg-yellow-400 flex items-center justify-center z-50">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+          </button>
+        </div>
+
+        <button onClick={() => router.push('/kasa')} className="flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-[#FFB700] active:text-[#FFB700] active:scale-110 transition-all p-2">
+          <span className="text-2xl">💰</span><span className="text-[10px] font-bold">Kasa</span>
         </button>
       </nav>
 
