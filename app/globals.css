@@ -3,62 +3,19 @@
 @tailwind utilities;
 
 :root {
-  /* Ana arka plan rengi (Koyu Antrasit) */
-  --bg-main: #121212;
-  /* Kartların arka plan rengi (Biraz daha açık gri) */
-  --bg-card: #1E1E1E;
-  /* Vurgu rengimiz (Carbay Sarısı) */
-  --color-accent: #FFB700;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 249, 250, 251;
+  --background-end-rgb: 249, 250, 251;
 }
 
 body {
-  background-color: var(--bg-main);
-  color: #ffffff; /* Genel yazı rengi beyaz */
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
 }
 
-/* --- ÖZEL EFEKTLER --- */
-
-/* O görseldeki gibi yumuşak, havalı gölge */
-.premium-shadow {
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s ease;
-}
-
-/* Kartın üzerine gelince hafifçe yukarı kalkması ve parlaması */
-.premium-card:hover {
-  transform: translateY(-5px); /* 5 piksel yukarı */
-  box-shadow: 0 20px 40px -10px rgba(255, 183, 0, 0.15); /* Sarımsı gölge artışı */
-}
-
-/* TÜM GİRİŞ KUTULARI İÇİN AYAR */
+/* Giriş kutularının yazı rengini garantiye alalım */
 input, textarea, select {
-  color: #ffffff !important; /* Yazı rengi beyaz */
-  background-color: #2d2d2d; /* Arkaplan koyu gri */
-  border: 1px solid #444; /* İnce gri çerçeve */
-  border-radius: 12px; /* Hafif yuvarlak köşeler */
-}
-
-input:focus, textarea:focus, select:focus {
-    border-color: var(--color-accent) !important; /* Tıklanınca sarı çerçeve */
-    box-shadow: 0 0 0 2px rgba(255, 183, 0, 0.2); /* Sarı parlama */
-}
-
-/* Placeholder (İpucu yazısı) rengi */
-input::placeholder, textarea::placeholder {
-  color: #888 !important;
-}
-
-/* Kaydırma çubuğu (Scrollbar) tasarımı */
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-track {
-    background: var(--bg-main);
-}
-::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: var(--color-accent);
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb;
 }
