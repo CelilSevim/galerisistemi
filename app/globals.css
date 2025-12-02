@@ -3,46 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --bg-dark: #121212;       /* Ana Arka Plan */
-  --bg-card: #1E1E1E;       /* Kart Rengi */
-  --carbay-gold: #FFB700;   /* Senin Marka Sarın */
-  --text-main: #FFFFFF;     /* Ana Yazı */
-  --text-muted: #A1A1AA;    /* Soluk Yazı */
+  --bg-main: #000000; /* Tam Siyah */
+  --bg-card: #1C1C1E; /* Apple stili koyu gri kartlar */
+  --accent: #FFD60A;  /* Canlı Sarı */
 }
 
 body {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  font-family: 'Inter', sans-serif; /* Varsa modern font */
+  background-color: var(--bg-main);
+  color: white;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* GİRİŞ KUTULARI (INPUT) MODERN TASARIM */
-/* O görseldeki gibi koyu gri zemin, beyaz yazı */
-input, textarea, select {
-  background-color: #2C2C2E !important; 
-  color: #FFFFFF !important;
-  border: 1px solid #3A3A3C !important;
-  border-radius: 16px !important; /* İyice yuvarlatılmış */
-  padding: 12px 16px !important;
-  transition: all 0.3s ease;
-}
-
-input:focus, textarea:focus, select:focus {
-  border-color: var(--carbay-gold) !important;
-  box-shadow: 0 0 0 2px rgba(255, 183, 0, 0.2) !important;
-  outline: none;
-}
-
-/* Placeholder (İpucu yazısı) */
-input::placeholder, textarea::placeholder {
-  color: #6B6B70 !important;
-}
-
-/* Kaydırma Çubuğu (Scrollbar) Gizleme/Güzelleştirme */
+/* Scrollbar'ı gizle (Daha şık durması için) */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 0px;
+  background: transparent;
 }
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 10px;
+
+/* Input stilleri */
+input, select, textarea {
+  background-color: #2C2C2E !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 12px !important;
 }
