@@ -1,44 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
-  --bg-main: #000000;
-  --bg-card: #151515;
-  --accent: #FFD60A;
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
 }
 
 body {
-  background-color: var(--bg-main);
-  color: white;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+/* TÜM GİRİŞ KUTULARI İÇİN YAZI RENGİNİ SİYAH YAP */
+input, textarea, select {
+  color: #000000 !important; /* Yazı rengi siyah */
+  background-color: #ffffff; /* Arkaplan beyaz */
 }
 
-/* Scrollbar Gizleme (Daha temiz görünüm) */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #111;
-}
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-}
-
-/* Input ve Select Kutuları (Siyah Zemin, Beyaz Yazı) */
-input, select, textarea {
-  background-color: #222 !important;
-  color: white !important;
-  border: 1px solid #333 !important;
-  border-radius: 12px !important;
-  transition: all 0.3s ease;
-}
-input:focus, select:focus, textarea:focus {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 2px rgba(255, 214, 10, 0.2) !important;
-  outline: none !important;
+/* Placeholder (İpucu yazısı) rengini gri yap */
+input::placeholder, textarea::placeholder {
+  color: #9ca3af !important;
 }
