@@ -1,36 +1,48 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg-dark: #121212;       /* Ana Arka Plan */
+  --bg-card: #1E1E1E;       /* Kart Rengi */
+  --carbay-gold: #FFB700;   /* Senin Marka Sarın */
+  --text-main: #FFFFFF;     /* Ana Yazı */
+  --text-muted: #A1A1AA;    /* Soluk Yazı */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-/* TÜM GİRİŞ KUTULARI İÇİN YAZI RENGİNİ SİYAH YAP */
-input, textarea, select {
-  color: #000000 !important; /* Yazı rengi siyah */
-  background-color: #ffffff; /* Arkaplan beyaz */
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif; /* Varsa modern font */
 }
 
-/* Placeholder (İpucu yazısı) rengini gri yap */
+/* GİRİŞ KUTULARI (INPUT) MODERN TASARIM */
+/* O görseldeki gibi koyu gri zemin, beyaz yazı */
+input, textarea, select {
+  background-color: #2C2C2E !important; 
+  color: #FFFFFF !important;
+  border: 1px solid #3A3A3C !important;
+  border-radius: 16px !important; /* İyice yuvarlatılmış */
+  padding: 12px 16px !important;
+  transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--carbay-gold) !important;
+  box-shadow: 0 0 0 2px rgba(255, 183, 0, 0.2) !important;
+  outline: none;
+}
+
+/* Placeholder (İpucu yazısı) */
 input::placeholder, textarea::placeholder {
-  color: #9ca3af !important;
+  color: #6B6B70 !important;
+}
+
+/* Kaydırma Çubuğu (Scrollbar) Gizleme/Güzelleştirme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
 }
