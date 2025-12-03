@@ -18,7 +18,10 @@ export default function Home() {
   const [satisFiyati, setSatisFiyati] = useState('')
   const [satisTarihi, setSatisTarihi] = useState('')
   const [satisSozlesmesi, setSatisSozlesmesi] = useState<File | null>(null)
+  const [musteriAdi, setMusteriAdi] = useState('')
+  const [musteriTel, setMusteriTel] = useState('')
   const [satisYukleniyor, setSatisYukleniyor] = useState(false)
+  
 
   // Sözleşme Görüntüleme Penceresi
   const [sozlesmeArac, setSozlesmeArac] = useState<any>(null)
@@ -85,22 +88,52 @@ export default function Home() {
   }
 
   const satisiTamamla = async () => {
-    if (!satisFiyati || !satilacakArac || !satisTarihi) return alert('Lütfen fiyat ve tarih girin!')
+    // Validasyon: Müşteri adı da zorunlu oldu
+    if (!satisFiyati || !satilacakArac || !satisTarihi || !musteriAdi) {
+      return alert('Lütfen Fiyat, Tarih ve Müşteri Adını girin!')
+    }
+    
     setSatisYukleniyor(true)
-    try {
-      let sozlesmeUrl = ''
-      if (satisSozlesmesi) sozlesmeUrl = await dosyaYukle(satisSozlesmesi)
 
-      const { error } = await supabase.from('cars').update({
-        durum: 'Satıldı',
+    try {
+      // 1. ADIM: Müşteriyi Kaydet
+      const { data: musteriData, error: musteriError } = await supabase
+        .from('customers')
+        .insert([{ ad_soyad: musteriAdi, telefon: musteriTel }])
+        .select()
+        .single() // Eklenen müşterinin ID'sini almak için
+
+      if (musteriError) throw musteriError
+      
+      // 2. ADIM: Sözleşme Varsa Yükle
+      let sozlesmeUrl = ''
+      if (satisSozlesmesi) {
+        sozlesmeUrl = await dosyaYukle(satisSozlesmesi)
+      }
+
+      // 3. ADIM: Arabayı Güncelle (Satıldı yap + Müşteriye Bağla)
+      const { error } = await supabase.from('cars').update({ 
+        durum: 'Satıldı', 
         satis_bedeli: Number(satisFiyati),
         satis_tarihi: satisTarihi,
-        satis_sozlesmesi_url: sozlesmeUrl
+        satis_sozlesmesi_url: sozlesmeUrl,
+        customer_id: musteriData.id // Müşteri bağlantısı burada
       }).eq('id', satilacakArac.id)
 
       if (error) throw error
-      alert('🎉 Satış başarıyla kaydedildi!')
-      setSatilacakArac(null); setSatisFiyati(''); setSatisTarihi(''); setSatisSozlesmesi(null); verileriGetir()
+
+      alert('🎉 Satış ve Müşteri Kaydı Başarılı!')
+      
+      // Temizlik
+      setSatilacakArac(null)
+      setSatisFiyati('')
+      setSatisTarihi('')
+      setSatisSozlesmesi(null)
+      setMusteriAdi('') // Yeni eklenen temizlik
+      setMusteriTel('') // Yeni eklenen temizlik
+      
+      verileriGetir()
+
     } catch (error: any) {
       alert('Hata: ' + error.message)
     } finally {
@@ -326,14 +359,25 @@ export default function Home() {
 
                       <div className="p-5">
                         <div className="flex justify-between items-start mb-3">
-                          <div>
-                            <h3 className="car-title text-lg leading-tight">
-                              {arac.marka} {arac.model}
-                            </h3>
-                            <p className="text-xs text-gray-300 mt-1 font-mono bg-white/5 px-2 py-0.5 rounded inline-block">
-                              {arac.plaka}
-                            </p>
-                          </div>
+                         {/* YENİ HALİ (Bunu yapıştır) */}
+<div>
+  {/* 1. Marka ve Model (Büyük ve Kalın) */}
+  <h3 className="text-lg font-black text-gray-900 leading-tight uppercase tracking-tight">
+    {arac.marka} {arac.model}
+  </h3>
+
+  {/* 2. Donanım Paketi (Altında, Küçük ve Gri) */}
+  {arac.paket && (
+    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mt-1">
+      {arac.paket}
+    </p>
+  )}
+
+  {/* 3. Plaka (En altta kutucuk içinde) */}
+  <p className="text-xs text-gray-500 font-mono bg-gray-100 border border-gray-200 px-2 py-0.5 rounded inline-block mt-2">
+    {arac.plaka}
+  </p>
+</div>
 
                           {/* === TEK KART AKSİYON ÇERÇEVESİ (3x2 grid) === */}
                           <div className="card-actions">
@@ -722,6 +766,9 @@ export default function Home() {
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
                   Satış Fiyatı (TL)
                 </label>
+                {/* --- YENİ MÜŞTERİ ALANI BAŞLANGIÇ --- */}
+           
+            {/* --- YENİ MÜŞTERİ ALANI BİTİŞ --- */}
                 <input
                   type="number"
                   autoFocus
@@ -731,6 +778,27 @@ export default function Home() {
                   placeholder="0"
                 />
               </div>
+               <div className="mb-6 bg-white/5 p-4 rounded-xl border border-white/10">
+                <label className="block text-xs font-bold text-[#FFD60A] uppercase mb-3 tracking-wider">
+                  Müşteri Bilgileri
+                </label>
+                <div className="space-y-3">
+                    <input 
+                      type="text" 
+                      placeholder="Adı Soyadı" 
+                      value={musteriAdi} 
+                      onChange={(e) => setMusteriAdi(e.target.value)} 
+                      className="w-full p-3 bg-[#2C2C2E] border border-white/10 rounded-xl text-white text-sm outline-none focus:border-[#FFD60A]" 
+                    />
+                    <input 
+                      type="tel" 
+                      placeholder="Telefon (05XX...)" 
+                      value={musteriTel} 
+                      onChange={(e) => setMusteriTel(e.target.value)} 
+                      className="w-full p-3 bg-[#2C2C2E] border border-white/10 rounded-xl text-white text-sm outline-none focus:border-[#FFD60A]" 
+                    />
+                </div>
+            </div>
               <div className="mb-4">
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
                   Satış Tarihi

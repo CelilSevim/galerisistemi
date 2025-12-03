@@ -12,6 +12,7 @@ export default function AracEkle() {
   const [formData, setFormData] = useState({
     marka: '',
     model: '',
+    paket: '',
     yil: '',
     plaka: '',
     kilometre: '',
@@ -66,6 +67,7 @@ export default function AracEkle() {
         {
           marka: formData.marka,
           model: formData.model,
+          paket: formData.paket,
           yil: Number(formData.yil),
           kilometre: Number(formData.kilometre),
           renk: formData.renk,
@@ -174,6 +176,16 @@ const inputBase =
                   }
                 />
               </div>
+              <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1 uppercase tracking-wide">
+                Donanım Paketi</label>
+              <input 
+                type="text" 
+                placeholder="Örn: M Sport, Titanium" 
+                className={inputBase} 
+                onChange={e => setFormData({...formData, paket: e.target.value})} 
+              />
+            </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1 uppercase tracking-wide">
                   Yıl
