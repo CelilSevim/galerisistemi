@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 export default function MusteriDefteri() {
   const router = useRouter()
   const [musteriler, setMusteriler] = useState<any[]>([])
+  const [aramaMetni, setAramaMetni] = useState('')
   const [yukleniyor, setYukleniyor] = useState(true)
 
   useEffect(() => {
@@ -34,7 +35,27 @@ export default function MusteriDefteri() {
     } else {
       setMusteriler(musteriler.filter(m => m.id !== id))
     }
+
   }
+  // --- ARAMA FİLTRESİ ---
+   const filtrelenenMusteriler = musteriler.filter(musteri => {
+    const aramaKucuk = aramaMetni.toLowerCase()
+    
+    return (
+      // 1. Müşteri isminde ara
+      musteri.ad_soyad.toLowerCase().includes(aramaKucuk) ||
+      // 2. Telefonda ara
+      musteri.telefon.includes(aramaKucuk) ||
+      // 3. Arabasında ara (Varsa)
+      (musteri.cars && musteri.cars.some((araba: any) => 
+        araba.marka.toLowerCase().includes(aramaKucuk) ||
+        araba.model.toLowerCase().includes(aramaKucuk) ||
+        araba.plaka.toLowerCase().includes(aramaKucuk)
+      ))
+    )
+  })
+ 
+
 
   return (
     <div className="min-h-screen bg-[#121212] p-4 md:p-8 pb-24 font-sans text-white">
@@ -49,11 +70,24 @@ export default function MusteriDefteri() {
           ← Garaja Dön
         </button>
       </div>
+      {/* --- ARAMA ÇUBUĞU --- */}
+      <div className="max-w-4xl mx-auto mb-8">
+        <div className="relative group">
+            <span className="absolute left-4 top-3.5 text-gray-500 group-focus-within:text-[#FFD60A] transition-colors"></span>
+            <input 
+              type="text" 
+              placeholder="Müşteri Adı, Telefon, Araç veya Plaka ara..." 
+              className="carbay-search"
+              value={aramaMetni} 
+              onChange={(e) => setAramaMetni(e.target.value)} 
+            />
+        </div>
+      </div>
 
       <div className="max-w-4xl mx-auto space-y-4">
         {yukleniyor ? <div className="text-center text-[#FFD60A] animate-pulse">Defter açılıyor...</div> : 
-         musteriler.length === 0 ? <div className="text-center text-gray-600 py-20 bg-[#1C1C1E] rounded-2xl border border-white/5">Henüz kayıtlı müşteri yok.</div> :
-         musteriler.map((musteri) => (
+         filtrelenenMusteriler.length === 0 ? <div className="text-center text-gray-600 py-20 bg-[#1C1C1E] rounded-2xl border border-white/5">Henüz kayıtlı müşteri yok.</div> :
+         filtrelenenMusteriler.map((musteri) => (
            <div key={musteri.id} className="bg-[#1C1C1E] p-6 rounded-2xl shadow-lg border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group hover:border-[#FFD60A]/30 transition-all">
              
              {/* SOL: Müşteri Bilgisi */}
@@ -75,15 +109,23 @@ export default function MusteriDefteri() {
                  {/* Araç Bilgisi Kutusu */}
                  <div className="bg-black/40 p-3 rounded-xl border border-white/5 text-sm min-w-[200px]">
                     <span className="text-gray-500 text-[10px] font-bold uppercase block mb-1 tracking-wider">Satın Aldığı Araç</span>
-                    {musteri.cars && musteri.cars.length > 0 ? (
-                      musteri.cars.map((araba: any) => (
-                        <div key={araba.id} className="font-bold text-[#FFD60A] flex items-center gap-1">
-                          🚗 {araba.marka} {araba.model} 
-                        </div>
-                      ))
-                    ) : (
-                      <span className="text-gray-600 italic text-xs">Araç kaydı yok</span>
-                    )}
+                    {/* YENİ EKLENECEK KOD BURASI */}
+{/* BU YENİ KODU YAPIŞTIR */}
+{musteri.cars.map((araba: any) => (
+  <div key={araba.id} className="font-bold text-[#FFD60A] flex items-center gap-2 flex-wrap">
+    
+    {/* 1. Marka Model */}
+    <span className="flex items-center gap-1 whitespace-nowrap">
+      {araba.marka} {araba.model} 
+    </span>
+
+    {/* 2. Plaka (Yanında) */}
+    <span className="text-gray-400 text-xs bg-white/5 px-2 py-0.5 rounded w-fit font-mono border border-white/5 ml-auto md:ml-0">
+       {araba.plaka}
+    </span>
+
+  </div>
+))}
                  </div>
 
                  {/* SİLME BUTONU */}
@@ -100,9 +142,54 @@ export default function MusteriDefteri() {
              </div>
 
            </div>
+           
          ))
+         
         }
+        <style jsx global>{`
+  .carbay-search {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 1.6rem;
+    background: rgba(8, 8, 12, 0.95);
+    border: 1.5px solid rgba(255, 183, 0, 0.7);
+    color: #ffffff !important;;
+    font-size: 1rem;
+    font-weight: 600;
+    outline: none;
+
+    box-shadow:
+      0 0 8px rgba(255, 183, 0, 0.25),
+      inset 0 0 10px rgba(0, 0, 0, 0.5);
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.25s ease,
+      background 0.2s ease;
+  }
+
+  .carbay-search::placeholder {
+    color: #94a3b8;
+    opacity: 0.85;
+    font-weight: 500;
+  }
+
+  .carbay-search:focus {
+    border-color: #ffcc00;
+    background: #020617;
+
+    box-shadow:
+      0 0 12px rgba(255, 200, 0, 0.6),
+      0 0 32px rgba(255, 183, 0, 0.18),
+      inset 0 0 12px rgba(0, 0, 0, 0.6);
+  }
+`}</style>
+
       </div>
     </div>
+    
+    
   )
+  
+  
 }

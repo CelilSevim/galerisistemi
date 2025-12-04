@@ -173,7 +173,7 @@ export default function Home() {
     }
 
     const mesaj = `Merhaba, Carbay Motors güvencesiyle incelediğiniz araç:${bosluk}${bosluk}` +
-      `🚗 *${arac.marka} ${arac.model}*${bosluk}` +
+      `🚗 *${arac.marka} ${arac.model} ${arac.paket}*${bosluk}` +
       `📅 Yıl: ${arac.yil}${bosluk}` +
       `⛽ Yakıt: ${arac.yakit}${bosluk}` +
       `🕹 Vites: ${arac.vites}${bosluk}` +
@@ -274,7 +274,7 @@ export default function Home() {
             {/* ARAMA ALANI */}
             <div className="search-wrapper flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
               <div className="relative w-full md:w-96 form-field">
-                <span className="absolute left-3 top-3 text-gray-400"></span>
+                <span className="absolute left-4 top-3.5 text-gray-500 group-focus-within:text-[#FFD60A] transition-colors"></span>
                 <input
                   type="text"
                   placeholder="Marka, Model veya Plaka..."
@@ -362,7 +362,7 @@ export default function Home() {
                          {/* YENİ HALİ (Bunu yapıştır) */}
 <div>
   {/* 1. Marka ve Model (Büyük ve Kalın) */}
-  <h3 className="text-lg font-black text-gray-900 leading-tight uppercase tracking-tight">
+  <h3 className="text-lg font-black text-[#FFD54F] leading-tight uppercase tracking-tight drop-shadow-[0_0_6px_rgba(255,183,0,0.7)]">
     {arac.marka} {arac.model}
   </h3>
 
