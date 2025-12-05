@@ -21,7 +21,7 @@ export default function Home() {
   const [musteriAdi, setMusteriAdi] = useState('')
   const [musteriTel, setMusteriTel] = useState('')
   const [satisYukleniyor, setSatisYukleniyor] = useState(false)
-  
+
 
   // Sözleşme Görüntüleme Penceresi
   const [sozlesmeArac, setSozlesmeArac] = useState<any>(null)
@@ -92,7 +92,7 @@ export default function Home() {
     if (!satisFiyati || !satilacakArac || !satisTarihi || !musteriAdi) {
       return alert('Lütfen Fiyat, Tarih ve Müşteri Adını girin!')
     }
-    
+
     setSatisYukleniyor(true)
 
     try {
@@ -104,7 +104,7 @@ export default function Home() {
         .single() // Eklenen müşterinin ID'sini almak için
 
       if (musteriError) throw musteriError
-      
+
       // 2. ADIM: Sözleşme Varsa Yükle
       let sozlesmeUrl = ''
       if (satisSozlesmesi) {
@@ -112,8 +112,8 @@ export default function Home() {
       }
 
       // 3. ADIM: Arabayı Güncelle (Satıldı yap + Müşteriye Bağla)
-      const { error } = await supabase.from('cars').update({ 
-        durum: 'Satıldı', 
+      const { error } = await supabase.from('cars').update({
+        durum: 'Satıldı',
         satis_bedeli: Number(satisFiyati),
         satis_tarihi: satisTarihi,
         satis_sozlesmesi_url: sozlesmeUrl,
@@ -123,7 +123,7 @@ export default function Home() {
       if (error) throw error
 
       alert('🎉 Satış ve Müşteri Kaydı Başarılı!')
-      
+
       // Temizlik
       setSatilacakArac(null)
       setSatisFiyati('')
@@ -131,7 +131,7 @@ export default function Home() {
       setSatisSozlesmesi(null)
       setMusteriAdi('') // Yeni eklenen temizlik
       setMusteriTel('') // Yeni eklenen temizlik
-      
+
       verileriGetir()
 
     } catch (error: any) {
@@ -203,6 +203,18 @@ export default function Home() {
     const maliyet = (arac.alis_fiyati || 0) + masrafHesapla(arac)
     return toplam + ((arac.satis_bedeli || 0) - maliyet)
   }, 0)
+  // --- MEVCUT KODLARIN ALTINA EKLE ---
+
+  // 1. Bugünün tarihini al (Yıl-Ay formatında, örn: "2023-12")
+  const buAy = new Date().toISOString().slice(0, 7)
+
+  // 2. Sadece bu ay satılanları filtrele ve kârını topla
+  const buAykiKar = araclar
+    .filter(a => a.durum === 'Satıldı' && a.satis_tarihi && a.satis_tarihi.startsWith(buAy))
+    .reduce((toplam, arac) => {
+      const maliyet = (arac.alis_fiyati || 0) + masrafHesapla(arac)
+      return toplam + ((arac.satis_bedeli || 0) - maliyet)
+    }, 0)
 
   if (!oturumVarMi && yukleniyor) return <div className="min-h-screen flex items-center justify-center bg-gray-50">Yükleniyor...</div>
 
@@ -290,8 +302,8 @@ export default function Home() {
                     key={durum}
                     onClick={() => setFiltreDurumu(durum)}
                     className={`flex-1 md:flex-none px-6 py-2 rounded-md text-sm font-bold transition ${filtreDurumu === durum
-                        ? 'filter-btn-active'
-                        : 'text-gray-300 hover:text-white'
+                      ? 'filter-btn-active'
+                      : 'text-gray-300 hover:text-white'
                       }`}
                   >
                     {durum}
@@ -359,25 +371,25 @@ export default function Home() {
 
                       <div className="p-5">
                         <div className="flex justify-between items-start mb-3">
-                         {/* YENİ HALİ (Bunu yapıştır) */}
-<div>
-  {/* 1. Marka ve Model (Büyük ve Kalın) */}
-  <h3 className="text-lg font-black text-[#FFD54F] leading-tight uppercase tracking-tight drop-shadow-[0_0_6px_rgba(255,183,0,0.7)]">
-    {arac.marka} {arac.model}
-  </h3>
+                          {/* YENİ HALİ (Bunu yapıştır) */}
+                          <div>
+                            {/* 1. Marka ve Model (Büyük ve Kalın) */}
+                            <h3 className="text-lg font-black text-[#FFD54F] leading-tight uppercase tracking-tight drop-shadow-[0_0_6px_rgba(255,183,0,0.7)]">
+                              {arac.marka} {arac.model}
+                            </h3>
 
-  {/* 2. Donanım Paketi (Altında, Küçük ve Gri) */}
-  {arac.paket && (
-    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mt-1">
-      {arac.paket}
-    </p>
-  )}
+                            {/* 2. Donanım Paketi (Altında, Küçük ve Gri) */}
+                            {arac.paket && (
+                              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mt-1">
+                                {arac.paket}
+                              </p>
+                            )}
 
-  {/* 3. Plaka (En altta kutucuk içinde) */}
-  <p className="text-xs text-gray-500 font-mono bg-gray-100 border border-gray-200 px-2 py-0.5 rounded inline-block mt-2">
-    {arac.plaka}
-  </p>
-</div>
+                            {/* 3. Plaka (En altta kutucuk içinde) */}
+                            <p className="text-xs text-gray-500 font-mono bg-gray-100 border border-gray-200 px-2 py-0.5 rounded inline-block mt-2">
+                              {arac.plaka}
+                            </p>
+                          </div>
 
                           {/* === TEK KART AKSİYON ÇERÇEVESİ (3x2 grid) === */}
                           <div className="card-actions">
@@ -670,67 +682,72 @@ export default function Home() {
 
         {/* SÖZLEŞMELER PENCERESİ */}
         {sozlesmeArac && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl h-[80vh] flex flex-col overflow-hidden">
-              <div className="p-4 bg-black text-white flex justify-between items-center border-b border-[#FFB700]">
+          <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
+            <div className="bg-gradient-to-b from-slate-900 to-black border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl h-[80vh] flex flex-col overflow-hidden">
+              <div className="p-5 bg-slate-900/95 flex justify-between items-center border-b border-white/10">
                 <div>
-                  <h3 className="font-bold text-[#FFB700]">Sözleşme Dosyaları</h3>
-                  <p className="text-xs text-gray-400">
+                  <h3 className="font-bold text-[#FFB700] text-lg tracking-wide uppercase">Sözleşme Dosyaları</h3>
+                  <p className="text-xs text-slate-400 mt-1">
                     {sozlesmeArac.marka} {sozlesmeArac.model}
                   </p>
                 </div>
                 <button
                   onClick={() => setSozlesmeArac(null)}
-                  className="text-gray-400 hover:text-white text-2xl"
+                  className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition"
                 >
                   ✕
                 </button>
               </div>
-              <div className="flex border-b border-gray-200">
+              <div className="flex border-b border-white/10 bg-black/40">
                 <button
                   onClick={() => setAktifSekme('alis')}
-                  className={`flex-1 py-3 font-bold text-sm transition ${aktifSekme === 'alis'
-                      ? 'border-b-4 border-[#FFB700] text-black bg-yellow-50'
-                      : 'text-gray-400'
+                  className={`flex-1 py-4 font-bold text-xs uppercase tracking-wider transition ${aktifSekme === 'alis'
+                    ? 'border-b-2 border-[#FFB700] text-[#FFB700] bg-yellow-500/5'
+                    : 'text-slate-500 hover:text-slate-300'
                     }`}
                 >
                   📥 Alış Sözleşmesi
                 </button>
                 <button
                   onClick={() => setAktifSekme('satis')}
-                  className={`flex-1 py-3 font-bold text-sm transition ${aktifSekme === 'satis'
-                      ? 'border-b-4 border-[#FFB700] text-black bg-yellow-50'
-                      : 'text-gray-400'
+                  className={`flex-1 py-4 font-bold text-xs uppercase tracking-wider transition ${aktifSekme === 'satis'
+                    ? 'border-b-2 border-[#FFB700] text-[#FFB700] bg-yellow-500/5'
+                    : 'text-slate-500 hover:text-slate-300'
                     }`}
                 >
                   📤 Satış Sözleşmesi
                 </button>
               </div>
-              <div className="flex-1 p-6 bg-gray-50 overflow-auto flex items-center justify-center">
+              <div className="flex-1 p-6 bg-[#0A0A0D] overflow-auto flex items-center justify-center relative">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+
                 {aktifSekme === 'alis' &&
                   (sozlesmeArac.sozlesme_url ? (
                     <img
                       src={sozlesmeArac.sozlesme_url}
-                      className="max-w-full max-h-full shadow-lg border"
+                      className="max-w-full max-h-full shadow-2xl border border-white/10 rounded-lg"
                     />
                   ) : (
-                    <div className="text-gray-400 text-center">
-                      <span className="text-4xl block mb-2">📂</span>Dosya Yok
+                    <div className="text-slate-600 text-center flex flex-col items-center gap-3">
+                      <span className="text-5xl opacity-20">📂</span>
+                      <span className="text-sm font-medium">Dosya Bulunamadı</span>
                     </div>
                   ))}
                 {aktifSekme === 'satis' &&
                   (sozlesmeArac.satis_sozlesmesi_url ? (
                     <img
                       src={sozlesmeArac.satis_sozlesmesi_url}
-                      className="max-w-full max-h-full shadow-lg border"
+                      className="max-w-full max-h-full shadow-2xl border border-white/10 rounded-lg"
                     />
                   ) : (
-                    <div className="text-gray-400 text-center">
-                      <span className="text-4xl block mb-2">📂</span>Dosya Yok
+                    <div className="text-slate-600 text-center flex flex-col items-center gap-3">
+                      <span className="text-5xl opacity-20">📂</span>
+                      <span className="text-sm font-medium">Dosya Bulunamadı</span>
                     </div>
                   ))}
               </div>
-              <div className="p-4 bg-white border-t text-center">
+              <div className="p-4 bg-slate-900 border-t border-white/10 text-center">
                 {(aktifSekme === 'alis' && sozlesmeArac.sozlesme_url) ||
                   (aktifSekme === 'satis' && sozlesmeArac.satis_sozlesmesi_url) ? (
                   <button
@@ -742,9 +759,10 @@ export default function Home() {
                         '_blank'
                       )
                     }
-                    className="text-black underline text-sm font-bold hover:text-[#FFB700]"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-bold hover:bg-white/10 hover:text-white transition"
                   >
-                    Tam Ekran Aç ↗
+                    <span>Tam Ekran Görüntüle</span>
+                    <span className="text-lg leading-none">↗</span>
                   </button>
                 ) : null}
               </div>
@@ -754,90 +772,146 @@ export default function Home() {
 
         {/* SATIŞ MODALI */}
         {satilacakArac && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">
-                  Satış Onayı
-                </h3>
-                <div className="w-16 h-1 bg-[#FFB700] mx-auto mt-2"></div>
-              </div>
-              <div className="mb-4">
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
-                  Satış Fiyatı (TL)
-                </label>
-                {/* --- YENİ MÜŞTERİ ALANI BAŞLANGIÇ --- */}
-           
-            {/* --- YENİ MÜŞTERİ ALANI BİTİŞ --- */}
-                <input
-                  type="number"
-                  autoFocus
-                  value={satisFiyati}
-                  onChange={(e) => setSatisFiyati(e.target.value)}
-                  className="w-full text-3xl font-black text-gray-900 border-b-2 border-gray-200 focus:border-[#FFB700] outline-none py-2 bg-transparent"
-                  placeholder="0"
-                />
-              </div>
-               <div className="mb-6 bg-white/5 p-4 rounded-xl border border-white/10">
-                <label className="block text-xs font-bold text-[#FFD60A] uppercase mb-3 tracking-wider">
-                  Müşteri Bilgileri
-                </label>
-                <div className="space-y-3">
-                    <input 
-                      type="text" 
-                      placeholder="Adı Soyadı" 
-                      value={musteriAdi} 
-                      onChange={(e) => setMusteriAdi(e.target.value)} 
-                      className="w-full p-3 bg-[#2C2C2E] border border-white/10 rounded-xl text-white text-sm outline-none focus:border-[#FFD60A]" 
-                    />
-                    <input 
-                      type="tel" 
-                      placeholder="Telefon (05XX...)" 
-                      value={musteriTel} 
-                      onChange={(e) => setMusteriTel(e.target.value)} 
-                      className="w-full p-3 bg-[#2C2C2E] border border-white/10 rounded-xl text-white text-sm outline-none focus:border-[#FFD60A]" 
-                    />
+          <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
+            <div className="bg-gradient-to-b from-slate-900 to-black border border-yellow-500/30 rounded-2xl shadow-[0_0_50px_rgba(255,183,0,0.15)] w-full max-w-lg max-h-[90vh] overflow-y-auto">
+
+              {/* Header */}
+              <div className="sticky top-0 bg-slate-900/95 backdrop-blur-xl border-b border-white/10 px-6 py-5 flex justify-between items-center z-10">
+                <div>
+                  <h3 className="text-xl font-black text-[#FFB700] uppercase tracking-wide">
+                    Satış İşlemi
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {satilacakArac.marka} {satilacakArac.model} • {satilacakArac.plaka}
+                  </p>
                 </div>
-            </div>
-              <div className="mb-4">
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
-                  Satış Tarihi
-                </label>
-                <input
-                  type="date"
-                  value={satisTarihi}
-                  onChange={(e) => setSatisTarihi(e.target.value)}
-                  className="w-full border rounded-lg p-2 bg-gray-50"
-                />
-              </div>
-              <div className="mb-6">
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
-                  Satış Sözleşmesi
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    setSatisSozlesmesi(e.target.files ? e.target.files[0] : null)
-                  }
-                  className="w-full text-sm text-gray-500"
-                />
-              </div>
-              <div className="flex gap-3">
                 <button
                   onClick={() => setSatilacakArac(null)}
-                  className="flex-1 py-3 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200"
+                  className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition"
                 >
-                  İptal
+                  ✕
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+
+                {/* ARAÇ NOTLARI (YENİ) */}
+                {satilacakArac.notlar && (
+                  <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-xl p-4">
+                    <h4 className="flex items-center gap-2 text-[11px] font-bold text-yellow-500 uppercase tracking-widest mb-2">
+                      <span className="text-lg">📝</span> Araç Notları
+                    </h4>
+                    <div className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed max-h-32 overflow-y-auto pr-2 custom-scrollbar">
+                      {satilacakArac.notlar}
+                    </div>
+                  </div>
+                )}
+
+                {/* FİYAT */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+                    Satış Fiyatı (TL)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      autoFocus
+                      placeholder="0"
+                      value={satisFiyati}
+                      onChange={(e) => setSatisFiyati(e.target.value)}
+                      className="w-full bg-[#0A0A0D] border border-white/10 rounded-xl px-4 py-4 text-2xl font-black text-white outline-none focus:border-[#FFB700] focus:ring-1 focus:ring-[#FFB700] transition placeholder:text-slate-700"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₺</span>
+                  </div>
+                </div>
+
+                {/* MÜŞTERİ BİLGİLERİ */}
+                <div className="bg-white/5 rounded-xl border border-white/5 p-4 space-y-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                      👤
+                    </div>
+                    <span className="text-sm font-bold text-slate-200">Müşteri Bilgileri</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-3">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Adı Soyadı"
+                        value={musteriAdi}
+                        onChange={(e) => setMusteriAdi(e.target.value)}
+                        className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-indigo-500 transition"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="tel"
+                        placeholder="Telefon (05XX...)"
+                        value={musteriTel}
+                        onChange={(e) => setMusteriTel(e.target.value)}
+                        className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-indigo-500 transition"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  {/* TARİH */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+                      Satış Tarihi
+                    </label>
+                    <input
+                      type="date"
+                      value={satisTarihi}
+                      onChange={(e) => setSatisTarihi(e.target.value)}
+                      className="w-full bg-[#0A0A0D] border border-white/10 rounded-xl px-3 py-3 text-sm text-white outline-none focus:border-[#FFB700] transition h-[46px]"
+                    />
+                  </div>
+
+                  {/* SÖZLEŞME */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+                      Sözleşme Yükle
+                    </label>
+                    <div className="relative overflow-hidden">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id="satis-sozlesme"
+                        onChange={(e) => setSatisSozlesmesi(e.target.files ? e.target.files[0] : null)}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="satis-sozlesme"
+                        className={`flex items-center justify-center gap-2 w-full h-[46px] rounded-xl border border-dashed cursor-pointer transition text-xs font-bold ${satisSozlesmesi ? 'border-green-500/50 bg-green-900/20 text-green-400' : 'border-slate-600 bg-slate-800/50 text-slate-400 hover:border-slate-400 hover:text-slate-200'}`}
+                      >
+                        {satisSozlesmesi ? '✅ Dosya Seçildi' : '📄 Dosya Seç'}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* FOOTER */}
+              <div className="p-6 pt-2 flex gap-3">
+                <button
+                  onClick={() => setSatilacakArac(null)}
+                  className="flex-1 py-4 rounded-xl font-bold text-slate-400 hover:bg-white/5 transition"
+                >
+                  Vazgeç
                 </button>
                 <button
                   onClick={satisiTamamla}
                   disabled={satisYukleniyor}
-                  className="flex-1 py-3 bg-[#FFB700] text-black font-bold rounded-lg hover:bg-yellow-400 shadow-lg"
+                  className="flex-[2] py-4 bg-[#FFB700] text-black rounded-xl font-black text-lg shadow-[0_0_20px_rgba(255,183,0,0.4)] hover:bg-[#FFC800] hover:scale-[1.02] active:scale-[0.98] transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {satisYukleniyor ? '...' : 'Satışı Tamamla'}
+                  {satisYukleniyor ? 'İŞLENİYOR...' : 'SATIŞI ONAYLA ve BİTİR'}
                 </button>
               </div>
+
             </div>
           </div>
         )}
@@ -1160,14 +1234,15 @@ export default function Home() {
             "Segoe UI", sans-serif;
         }
 
-        /* TÜM GİRİŞ KUTULARI İÇİN YAZI RENGİNİ SİYAH YAP */
+        /* TÜM GİRİŞ KUTULARI İÇİN YAZI RENGİNİ BEYAZ, ARKAPLANI KOYU YAP */
         input,
         textarea,
         select {
-          color: #000000 !important;
-          background-color: #ffffff;
+          background-color: #0A0A0D !important;
+          color: #ffffff !important;
           font: inherit;
         }
+
 
         /* Placeholder (İpucu yazısı) */
         input::placeholder,
