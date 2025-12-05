@@ -255,8 +255,9 @@ export default function AnalizPaneli() {
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
           <div>
 
-            <h1 className="text-4xl font-black bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-              CARBAY KÂR ANALİZİ
+            <h1 className="text-4xl font-black">
+              <span className="text-[#FFB700] drop-shadow-[0_0_15px_rgba(255,183,0,0.3)]">CAR</span>
+              <span className="bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">BAY ANALİZ</span>
             </h1>
           </div>
 
@@ -266,9 +267,9 @@ export default function AnalizPaneli() {
               <select
                 value={secilenYil}
                 onChange={(e) => setSecilenYil(Number(e.target.value))}
-                className="h-12 bg-[#0A0A0D] border border-[#C9A43B]/60 text-[#F5F5F5] text-sm rounded-xl px-4 pr-8 outline-none transition focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 appearance-none cursor-pointer hover:bg-[#FFD700]/5"
+                className="h-12 bg-[#0A0A0D] border border-white/10 text-slate-200 text-sm rounded-xl px-4 pr-8 outline-none transition focus:border-[#FFB700] focus:ring-1 focus:ring-[#FFB700]/50 appearance-none cursor-pointer hover:bg-white/5"
               >
-                {[2023, 2024, 2025, 2026].map(yl => (
+                {Array.from({ length: new Date().getFullYear() - 2023 + 2 }, (_, i) => 2023 + i).map(yl => (
                   <option key={yl} value={yl}>{yl}</option>
                 ))}
               </select>
@@ -284,7 +285,7 @@ export default function AnalizPaneli() {
               <select
                 value={secilenAy}
                 onChange={(e) => setSecilenAy(Number(e.target.value))}
-                className="h-12 bg-[#0A0A0D] border border-[#C9A43B]/60 text-[#F5F5F5] text-sm rounded-xl px-4 pr-8 outline-none transition focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 appearance-none cursor-pointer hover:bg-[#FFD700]/5 min-w-[140px]"
+                className="h-12 bg-[#0A0A0D] border border-white/10 text-slate-200 text-sm rounded-xl px-4 pr-8 outline-none transition focus:border-[#FFB700] focus:ring-1 focus:ring-[#FFB700]/50 appearance-none cursor-pointer hover:bg-white/5 min-w-[140px]"
               >
                 {yillikOzet.map((veri) => (
                   <option key={veri.ayIndex} value={veri.ayIndex}>{veri.ay}</option>
