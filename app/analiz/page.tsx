@@ -255,8 +255,8 @@ export default function AnalizPaneli() {
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
           <div>
 
-            <h1 className="text-5xl font-black bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-              KÂR ANALİZİ
+            <h1 className="text-4xl font-black bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+              CARBAY KÂR ANALİZİ
             </h1>
           </div>
 
